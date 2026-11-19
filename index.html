@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Universitas Indonesia Maju</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&display=swap">
+<style>
+:root{--bg:#f6f0e4;--card:#fffaf0;--ink:#1d1a16;--mute:#6f675b;--line:#e2d8c4;--ac:#d6401b;--ai:#fff;--ok:#2f7d4f;--bad:#b3261e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17140f;--card:#221e17;--ink:#f3ecdd;--mute:#a69c8a;--line:#3a3327;--ac:#ff6b3d;--ai:#1d1a16;--ok:#6fcf97;--bad:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17140f;--card:#221e17;--ink:#f3ecdd;--mute:#a69c8a;--line:#3a3327;--ac:#ff6b3d;--ai:#1d1a16;--ok:#6fcf97;--bad:#ff8a80;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+h1,h2,h3,.hd{font-family:"Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.02em;margin:0}
+button{font:inherit;cursor:pointer;color:inherit}
+.pri{background:var(--ac);color:var(--ai);border:0;border-radius:10px;padding:12px 20px;font-weight:700}
+.pri:disabled{opacity:.4}
+#steps{display:flex;gap:6px;list-style:none;margin:0;padding:12px 16px;font-size:13px;color:var(--mute);flex:none}
+#steps li{flex:1;border-top:3px solid var(--line);padding-top:4px}
+#steps li.on{border-color:var(--ac);color:var(--ink);font-weight:700}#steps li.done{border-color:var(--ink)}
+main{flex:1;min-height:0;display:flex;flex-direction:column}
+.scr{flex:1;min-height:0;overflow:auto;padding:8px 16px 28px;width:100%;max-width:880px;margin:0 auto}
+.scr[hidden]{display:none}
+.hero h1{font-size:clamp(2.4rem,9vw,4.6rem);line-height:.95;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--ac)}
+.lead{color:var(--mute);max-width:46ch;margin:14px 0 22px}
+.tiles{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:62px 62px;gap:6px;margin:0 0 22px}
+.tiles div{border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;display:flex;align-items:end;color:#1d1a16}
+.t1{background:#a8cf88}.t2{background:#c7b697;grid-row:span 2}.t3{background:#7b8088;color:#fff!important}.t4{background:#d98a4e}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 6px}
+input[type=text]{width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{margin:0;font-weight:600}.chips input{display:none}
+.chips span{display:block;padding:9px 14px;border:1.5px solid var(--line);border-radius:99px;cursor:pointer}
+.chips input:checked+span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#bar{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 18px}#bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .3s}
+#q{font-size:1.35rem;margin:0 0 14px;line-height:1.25}
+#opts{display:grid;gap:8px}
+#opts button{text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
+#opts button.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,var(--card))}
+#opts button.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 18%,var(--card))}
+#fb{min-height:24px;font-weight:700;margin:10px 0}
+.ktm{background:var(--ink);color:var(--bg);border-radius:18px;padding:22px;position:relative;overflow:hidden}
+.ktm::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:var(--ac)}
+.ktm small{opacity:.7;letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+.ktm h2{font-size:2rem;margin:6px 0 2px;position:relative;z-index:1}
+.ktm dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:14px 0 0;font-size:14px}.ktm dt{opacity:.65}.ktm dd{margin:0;font-weight:700}
+.badge{display:inline-block;background:var(--ac);color:var(--ai);font-weight:800;padding:2px 10px;border-radius:6px;position:relative;z-index:1}
+/* game */
+#game{max-width:none;padding:0;display:flex;flex-direction:column}
+#game[hidden]{display:none}
+.cv{position:relative;flex:1;min-height:0;background:#d9cdb2}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+.hud{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.hud b{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:13px;width:max-content}
+.hud span{font-size:12px;background:rgba(0,0,0,.55);color:#fff;border-radius:8px;padding:3px 8px;max-width:230px}
+#talk{position:absolute;right:12px;bottom:12px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#dp{position:absolute;left:12px;bottom:12px;display:none;grid-template:repeat(3,44px)/repeat(3,44px);gap:4px}
+#dp button{background:var(--card);border:1px solid var(--line);border-radius:10px;font-size:18px;touch-action:none}
+@media(hover:none){#dp{display:grid}}
+aside{flex:none;max-height:44%;overflow:auto;background:var(--card);border-top:1px solid var(--line);padding:12px 14px}
+aside h3{font-size:15px;margin:10px 0 6px}
+.m{display:grid;grid-template-columns:62px 1fr 34px;align-items:center;gap:8px;font-size:13px;margin:4px 0}
+.m i{height:8px;background:var(--line);border-radius:9px;overflow:hidden}.m u{display:block;height:100%;background:var(--ac);text-decoration:none;transition:width .3s}
+.m b{text-align:right}
+#acts{display:grid;gap:6px}
+#acts button{text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px}
+#acts button:disabled{opacity:.45;cursor:not-allowed}#acts small{display:block;color:var(--mute);font-size:12px}
+#log{font-size:13px;color:var(--mute);margin:0;padding-left:16px}
+@media(min-width:900px){#game{flex-direction:row}aside{width:310px;max-height:none;border-top:0;border-left:1px solid var(--line)}}
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;z-index:5;padding:10px}
+.dlg[hidden]{display:none}
+.dc{background:var(--card);width:100%;max-width:520px;border-radius:18px;padding:14px;max-height:78dvh;display:flex;flex-direction:column;margin-bottom:env(safe-area-inset-bottom,0px)}
+.dc header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dc header button{background:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+.chat{overflow:auto;flex:1;margin:10px 0;display:flex;flex-direction:column;gap:6px;min-height:60px}
+.chat p{margin:0;padding:8px 12px;border-radius:12px;max-width:88%;font-size:15px}
+.chat .n{background:var(--bg);border:1px solid var(--line)}.chat .u{background:var(--ac);color:var(--ai);align-self:flex-end}
+.qs{display:grid;gap:6px}.qs button{text-align:left;border:1.5px solid var(--line);background:none;border-radius:10px;padding:9px 12px;font-size:14px}
+.qs button:hover{border-color:var(--ac)}
+</style></head><body>
+<ol id="steps"><li class="on">1 Daftar</li><li>2 Ujian</li><li>3 Maba</li><li>4 Kampus</li></ol>
+<main>
+<section class="scr hero" id="s0">
+ <h1>Universitas<br><em>Indonesia</em> Maju</h1>
+ <p class="lead">Daftar, lulus ujian masuk, lalu jelajahi kampus yang luas: parkiran, taman, gedung kuliah, dan lapangan basket. Semua orang di sini punya cerita.</p>
+ <div class="tiles"><div class="t1">Taman Kampus</div><div class="t2">Gedung Kuliah</div><div class="t3">Parkiran</div><div class="t4" style="grid-column:1">Lapangan Basket</div></div>
+ <div class="card"><label for="nm" style="margin-top:0">Namamu</label><input type="text" id="nm" maxlength="20" placeholder="Nama calon mahasiswa" autocomplete="off">
+ <label>Karakter</label><div class="chips"><label><input type="radio" name="g" value="c" checked><span>Cowok</span></label><label><input type="radio" name="g" value="w"><span>Cewek</span></label></div><label>Pilih jurusan</label><div class="chips" id="jur"></div>
+ <p style="margin:18px 0 0"><button class="pri" id="go0">Daftar &amp; mulai ujian masuk</button></p></div>
+</section>
+<section class="scr" id="s1" hidden>
+ <div id="eb"><div class="hd" style="color:var(--mute);font-size:14px" id="qn"></div><div id="bar"><i></i></div>
+ <h2 id="q"></h2><div id="opts"></div><div id="fb"></div><button class="pri" id="next" hidden>Lanjut</button></div>
+ <div id="fail" class="card" hidden><h2>Belum lulus kali ini</h2><p id="fs"></p><p>Nilai minimal 4 dari 6 soal. Tenang, ada kesempatan kedua.</p><button class="pri" id="retry">Ulangi ujian</button></div>
+</section>
+<section class="scr" id="s2" hidden>
+ <div class="ktm"><small>Selamat! Kamu dinyatakan lulus</small><h2 id="pn"></h2><span class="badge">MAHASISWA BARU (MABA)</span>
+ <dl><dt>Kampus</dt><dd>Universitas Indonesia Maju</dd><dt>Jurusan</dt><dd id="pj"></dd><dt>NIM</dt><dd id="pi"></dd><dt>Nilai ujian</dt><dd id="ps"></dd><dt>Status</dt><dd>Aktif · Angkatan baru</dd></dl></div>
+ <p class="lead">Kamu tiba di parkiran. Cari taman, gedung kuliah, dan lapangan basket, lalu ajak ngobrol siapa saja yang kamu temui.</p>
+ <button class="pri" id="enter">Masuk dunia kampus</button>
+</section>
+<section class="scr" id="game" hidden>
+ <div class="cv"><canvas id="cv"></canvas>
+  <div class="hud"><b id="zn"></b><span>Ketuk peta / WASD / panah untuk jalan · E untuk ngobrol</span></div>
+  <div id="dp"><i></i><button data-d="0,-1">▲</button><i></i><button data-d="-1,0">◀</button><i></i><button data-d="1,0">▶</button><i></i><button data-d="0,1">▼</button><i></i></div>
+  <button class="pri" id="talk" hidden></button></div>
+ <aside><h3>Status mahasiswa</h3>
+  <div class="m"><span>Energi</span><i><u id="be"></u></i><b id="ve"></b></div>
+  <div class="m"><span>Mood</span><i><u id="bm"></u></i><b id="vm"></b></div>
+  <div class="m"><span>Ilmu</span><i><u id="bi"></u></i><b id="vi"></b></div>
+  <div style="font-size:13px;color:var(--mute)">Kelas diikuti: <b id="kc">0</b></div>
+  <h3>Aktivitas</h3><div id="acts"></div><h3>Catatan</h3><ul id="log"></ul></aside>
+</section>
+</main>
+<div class="dlg" id="dlg" hidden><div class="dc"><header><strong class="hd" id="dn"></strong><button id="dx">Tutup</button></header><div class="chat" id="dl"></div><div class="qs" id="dq"></div></div></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const R=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)],cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const S={name:'',jur:'Teknik Informatika',qi:0,sc:0,en:80,mood:70,ilmu:0,kelas:0,lock:false};
+const JUR=['Teknik Informatika','Sistem Informasi','Manajemen','Matematika'];
+$('#jur').innerHTML=JUR.map((j,i)=>`<label><input type="radio" name="j" value="${j}" ${i?'':'checked'}><span>${j}</span></label>`).join('');
+function go(n){$$('.scr').forEach((e,i)=>e.hidden=i!==n);$$('#steps li').forEach((e,i)=>e.className=i<n?'done':i==n?'on':'');if(n==3)start();}
+$('#go0').onclick=()=>{const v=$('#nm').value.trim();if(!v){$('#nm').focus();return}S.name=v;S.jur=$('input[name=j]:checked').value;S.qi=0;S.sc=0;go(1);showQ()};
+/* ujian */
+const Q=[['Deret angka: 2, 6, 18, 54, … Angka berikutnya?',['108','162','148','216'],1],
+['Sila ketiga Pancasila berbunyi?',['Kemanusiaan yang adil dan beradab','Persatuan Indonesia','Keadilan sosial','Ketuhanan Yang Maha Esa'],1],
+['Semua mahasiswa rajin belajar. Sari seorang mahasiswa. Kesimpulannya?',['Sari pasti juara kelas','Sari rajin belajar','Sari tidak suka olahraga','Tidak bisa disimpulkan'],1],
+['IPK adalah singkatan dari?',['Indeks Prestasi Kumulatif','Indeks Pelajaran Kampus','Ijazah Perguruan Kampus','Indikator Prestasi Kelas'],0],
+['5 mesin membuat 5 barang dalam 5 menit. Berapa menit 100 mesin membuat 100 barang?',['100 menit','20 menit','5 menit','1 menit'],2],
+['Maba bingung jadwal kuliah. Langkah paling tepat?',['Menunggu saja di parkiran','Cek KRS dan tanya dosen wali','Bolos sampai semester depan','Menebak ruang kelas'],1]];
+function showQ(){$('#eb').hidden=false;$('#fail').hidden=true;const[q,o]=Q[S.qi];$('#qn').textContent=`Soal ${S.qi+1} dari ${Q.length}`;$('#bar i').style.width=(S.qi/Q.length*100)+'%';$('#q').textContent=q;
+ $('#opts').innerHTML='';o.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>ans(i,b);$('#opts').append(b)});$('#next').hidden=true;$('#fb').textContent=''}
+function ans(i,b){if(!$('#next').hidden)return;const a=Q[S.qi][2];$('#opts').children[a].classList.add('ok');if(i===a)S.sc++;else b.classList.add('bad');
+ $('#fb').textContent=i===a?'Tepat!':'Kurang tepat.';$('#next').hidden=false;$('#next').textContent=S.qi==Q.length-1?'Lihat hasil':'Lanjut'}
+$('#next').onclick=()=>{S.qi++;if(S.qi<Q.length)return showQ();
+ if(S.sc>=4){$('#pn').textContent=S.name;$('#pj').textContent=S.jur;$('#pi').textContent='26'+Math.floor(R(1e6,9.9e6));$('#ps').textContent=`${S.sc} / ${Q.length} benar`;go(2)}
+ else{$('#eb').hidden=true;$('#fail').hidden=false;$('#fs').textContent=`Skormu ${S.sc} dari ${Q.length}.`}};
+$('#retry').onclick=()=>{S.qi=0;S.sc=0;showQ()};
+$('#enter').onclick=()=>go(3);
+/* dunia */
+const W=1500,H=1000;
+const ZN=[{id:'taman',n:'Taman Kampus',x:0,y:0,w:640,h:480},{id:'gedung',n:'Gedung Kuliah & Koridor',x:640,y:0,w:860,h:440},{id:'parkir',n:'Area Parkiran',x:0,y:520,w:600,h:480},{id:'basket',n:'Lapangan Basket',x:880,y:480,w:620,h:520}];
+const zoneAt=(x,y)=>ZN.find(z=>x>=z.x&&x<z.x+z.w&&y>=z.y&&y<z.y+z.h)||{id:'plaza',n:'Plaza Kampus'};
+let seed=7;const rng=()=>(seed=(seed*16807)%2147483647)/2147483647;
+let BG;
+function buildBG(){BG=document.createElement('canvas');BG.width=W;BG.height=H;const g=BG.getContext('2d');
+ g.fillStyle='#d9cdb2';g.fillRect(0,0,W,H);
+ g.fillStyle='#a8cf88';g.fillRect(0,0,640,480);g.fillStyle='#e6d9bd';g.fillRect(0,420,640,34);g.fillRect(560,0,34,480);
+ for(let i=0;i<18;i++){let x=rng()*620+10,y=rng()*400+30;if(x>170&&x<500&&y>120&&y<360)continue;
+  g.fillStyle='rgba(0,0,0,.15)';g.beginPath();g.ellipse(x,y+14,24,9,0,0,7);g.fill();g.fillStyle='#6b4a2b';g.fillRect(x-4,y-6,8,20);g.fillStyle='#4f8f4a';g.beginPath();g.arc(x,y-14,24,0,7);g.fill();g.fillStyle='#69a85c';g.beginPath();g.arc(x-7,y-20,12,0,7);g.fill()}
+ g.fillStyle='#e6d9bd';g.beginPath();g.arc(330,205,52,0,7);g.fill();g.fillStyle='#8fc7e8';g.beginPath();g.arc(330,205,38,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(330,205,10,0,7);g.fill();
+ g.fillStyle='#8a5a34';g.fillRect(290,300,80,12);g.fillRect(296,312,6,12);g.fillRect(358,312,6,12);
+ for(let i=0;i<40;i++){g.fillStyle=pick(['#f2b8c6','#fff3b0','#fff']);g.fillRect(rng()*620,rng()*400,4,4)}
+ g.fillStyle='#e9ddc5';g.fillRect(640,0,860,440);g.fillStyle='#c7b697';g.fillRect(640,0,860,190);
+ g.strokeStyle='rgba(0,0,0,.08)';for(let x=640;x<1500;x+=60){g.beginPath();g.moveTo(x,190);g.lineTo(x,440);g.stroke()}for(let y=190;y<440;y+=60){g.beginPath();g.moveTo(640,y);g.lineTo(1500,y);g.stroke()}
+ [760,980,1200,1380].forEach((x,i)=>{g.fillStyle='#6b5a3f';g.fillRect(x-35,80,70,110);g.fillStyle='#e9ddc5';g.fillRect(x-30,50,60,18);g.fillStyle='#3a2f20';g.font='700 12px sans-serif';g.textAlign='center';g.fillText('R.10'+(i+1),x,63)});
+ g.fillStyle='#7b8088';g.fillRect(0,520,600,480);g.strokeStyle='#fff';g.lineWidth=2;
+ for(const y of[560,880])for(let i=0;i<9;i++){const x=20+i*62;g.strokeRect(x,y,56,100);if(rng()<.6){g.fillStyle=pick(['#c0392b','#2c6e9b','#e8e2d0','#2b2b2b','#e0a800']);g.beginPath();g.roundRect(x+9,y+10,38,80,8);g.fill();g.fillStyle='rgba(255,255,255,.35)';g.fillRect(x+13,y+24,30,16)}}
+ g.fillStyle='#e0d6bf';g.fillRect(20,520,50,28);
+ g.fillStyle='#c9bfa6';g.fillRect(880,480,620,520);g.fillStyle='#d98a4e';g.fillRect(930,540,480,400);g.strokeStyle='#fff';g.lineWidth=3;
+ g.strokeRect(930,540,480,400);g.beginPath();g.moveTo(1170,540);g.lineTo(1170,940);g.stroke();g.beginPath();g.arc(1170,740,48,0,7);g.stroke();g.strokeRect(930,650,95,180);g.strokeRect(1315,650,95,180);
+ g.fillStyle='#e8e8e8';[[936,740],[1404,740]].forEach(([x,y])=>{g.beginPath();g.arc(x,y,9,0,7);g.fill()});
+ g.font='800 26px "Bricolage Grotesque",sans-serif';g.textAlign='left';g.fillStyle='rgba(30,20,10,.5)';
+ ZN.forEach(z=>g.fillText(z.n,z.x+16,z.y+(z.id=='parkir'||z.id=='basket'?z.h-18:z.id=='gedung'?160:36)));
+ g.fillText('Plaza',690,700)}
+/* NPC */
+const NP=[],COL=['#3f7cac','#7a9e3f','#b5651d','#6c5b7b','#2a9d8f','#c97b84','#555b6e','#e0a800'];
+function mk(role,hx,hy,r,o={}){NP.push(Object.assign({role,x:hx,y:hy,hx,hy,r,tx:hx,ty:hy,w:R(0,2),sp:36,col:pick(COL),mv:0},o))}
+mk('Satpam',80,590,18,{col:'#2b4a7a',sp:25});mk('Mahasiswa',260,820,150);mk('Mahasiswa',420,640,120);mk('Mahasiswa',150,880,90);
+[[1050,700],[1200,640],[1300,820],[1150,860]].forEach(([x,y])=>mk('Anak Basket',x,y,110,{col:'#d6401b',sp:70}));mk('Mahasiswa',910,560,40);
+mk('Ayla',330,268,0,{col:'#e9739b',hair:'#1a0f12'});
+for(let i=0;i<7;i++){const a=i/7*Math.PI*2;mk('NPC Cowok',330+Math.cos(a)*92,268+Math.sin(a)*70+10,14,{sp:18})}
+mk('Mahasiswa',120,120,90);mk('Mahasiswa',540,400,70);
+const DOS=['Algoritma & Pemrograman','Basis Data','Kalkulus','Pengantar Manajemen'];
+DOS.forEach((c,i)=>mk('Dosen '+c,[760,980,1200,1380][i],330,70,{col:'#5a3e6b',sp:22,hair:'#bbb'}));
+mk('Mahasiswa',900,300,150);mk('Mahasiswa',1300,260,120);mk('Mahasiswa',740,700,150);
+/* dialog data */
+const T={
+'Satpam':{i:'Selamat datang di Universitas Indonesia Maju. Ada yang bisa dibantu?',q:[
+['Parkiran motor sebelah mana?',['Di sini, barisan kiri untuk motor, kanan untuk mobil. Jangan lupa kunci stang.']],
+['Lapangan basket arahnya ke mana?',['Dari parkiran jalan ke timur lewat plaza. Lapangannya di kanan bawah.']],
+['Gedung kuliah di mana?',['Ke arah timur laut lewat plaza, gedung besar dengan koridor panjang.']],
+['Info ospek maba?',['Ospek pekan pertama, kumpul di taman kampus. Bawa kartu mahasiswa baru.','Datang jangan telat, ya. Taman kampus ada di utara parkiran.']]]},
+'Mahasiswa':{i:'Eh, maba ya? Santai aja, kampusnya seru kok.',q:[
+['Ada tips buat maba?',['Cek jadwal di KRS tiap pagi dan jangan telat kumpul tugas.','Kenalan sama teman sekelas dari minggu pertama, itu membantu banget.']],
+['Taman kampus di mana?',['Di utara parkiran, ramai terus. Katanya di sana ada yang paling populer di kampus.']],
+['Kantin atau tempat jajan?',['Paling enak jajan di taman, banyak yang jualan di sekitar situ.']],
+['Gimana rasanya kuliah di sini?',['Capek tapi seru. Tugas banyak, teman juga banyak.','Asal pandai bagi waktu, aman.']]]},
+'Anak Basket':{i:'Yo! Mau gabung main atau cuma nonton?',q:[
+['Boleh gabung main?',['Boleh banget, tinggal ke lapangan dan pakai tombol Main basket.','Gabung aja. Pemanasan dulu biar nggak kram.']],
+['Kapan jadwal latihan?',['Tiap sore, kecuali ada ujian. Kadang kami main sampai gelap.']],
+['Jurusan apa yang paling banyak main basket?',['Hampir semua jurusan ada. Yang penting mau lari-lari.']],
+['Arah ke gedung kuliah?',['Dari lapangan jalan ke barat laut, lalu ke utara lewat plaza.']]]},
+'NPC Cowok':{i:'Hmm? Ada perlu apa?',q:[
+['Kalian ngapain ngerubungin di sini?',['Cuma nongkrong kok. Ya, kebetulan Ayla lagi duduk di sini juga.','Nggak ngerubungin, cuma kebetulan banyak yang suka main ke taman.']],
+['Ayla itu siapa?',['Ayla itu cewek paling populer di kampus. Hampir semua orang kenal dia.']],
+['Gimana cara ngobrol sama Ayla?',['Ya samperin aja dan sapa sopan. Jangan sok kenal, nanti kamu diabaikan.']],
+['Gedung kuliah arahnya ke mana?',['Ke timur lewat jalan setapak, gedung besar dengan koridor panjang.']]]},
+'Ayla':{i:'Hai, {n}! Kamu maba ya? Aku Ayla.',q:[
+['Kamu lagi ngapain di taman?',['Santai sambil baca catatan kuliah. Di sini adem.','Lagi istirahat, kuliah pagi tadi padat banget.']],
+['Kenapa banyak yang ngerubungin kamu?',['Hehe, aku juga nggak minta mereka kumpul. Tapi ya sudah, aku ramah ke semua.','Mungkin karena aku sering bantu ospek. Jangan dipikirin, yang penting kamu nyaman.']],
+['Ada rekomendasi kegiatan buat maba?',['Ikut kelas, main basket kalau suka, dan sering jalan di taman. Jangan lupa istirahat.','Kenalan sama dosen tiap mata kuliah. Mereka asyik kalau diajak diskusi.']],
+['Dosen mana yang paling asyik?',['Dosen Basis Data suka kasih contoh nyata, jadi gampang dipahami.','Dosen Kalkulus tegas tapi sabar. Latihan soal saja yang banyak.']]]}};
+const DD={'Algoritma & Pemrograman':['Minggu ini kita bahas perulangan dan rekursi.','Tulis program pencarian biner, kumpul hari Jumat.','Ngoding setiap hari. Jangan hanya menyalin.'],
+'Basis Data':['Normalisasi tabel sampai bentuk normal ketiga.','Rancang ERD sistem perpustakaan kampus.','Pahami relasi antartabel dulu, baru tulis query.'],
+'Kalkulus':['Limit dan turunan fungsi.','Kerjakan 10 soal latihan bab turunan.','Banyak latihan soal, rumus saja tidak cukup.'],
+'Pengantar Manajemen':['Empat fungsi manajemen: rencana, organisasi, pengarahan, pengendalian.','Buat analisis SWOT warung kopi dekat kampus.','Aktif diskusi dan kumpulkan studi kasus tepat waktu.']};
+/* panel & aktivitas */
+const ACT=[{id:'parkir',t:'Cek parkiran',z:'parkir',e:-3,m:2,i:0,msg:['Kamu mengecek barisan motor dan semuanya aman.','Ada motor yang parkirnya miring, kamu rapikan.']},
+{id:'basket',t:'Main basket',z:'basket',e:-22,m:16,i:0,msg:['Tiga poin! Kamu berkeringat tapi senang.','Main satu lawan satu bareng anak basket. Seru!']},
+{id:'taman',t:'Jalan-jalan di taman',z:'taman',e:-4,m:9,i:0,msg:['Kamu berkeliling taman dan menghirup udara segar.','Duduk sebentar dekat air mancur, pikiran lebih tenang.']},
+{id:'kelas',t:'Masuk kelas',z:'gedung',e:-14,m:-3,i:16,msg:[]},
+{id:'jajan',t:'Istirahat & jajan',z:'taman',e:18,m:5,i:0,msg:['Kamu jajan dan duduk istirahat. Energi pulih sedikit.']}];
+let curZ=null,logs=[];
+function log(t){logs.unshift(t);logs=logs.slice(0,4);$('#log').innerHTML=logs.map(l=>`<li>${l}</li>`).join('')}
+function stats(){[['e','en'],['m','mood'],['i','ilmu']].forEach(([k,s])=>{S[s]=cl(S[s],0,100);$('#b'+k).style.width=S[s]+'%';$('#v'+k).textContent=Math.round(S[s])});$('#kc').textContent=S.kelas}
+function renderAct(){const zid=curZ?curZ.id:'';$('#acts').innerHTML='';ACT.forEach(a=>{const b=document.createElement('button'),zn=ZN.find(z=>z.id==a.z).n;b.disabled=a.z!==zid;
+ b.innerHTML=`${a.t}<small>${a.z===zid?'Bisa dilakukan di sini':'Pergi ke '+zn}</small>`;b.onclick=()=>doAct(a);$('#acts').append(b)})}
+function doAct(a,course){if(S.en+a.e<0){log('Energi hampir habis, istirahat dulu.');return}
+ let m=a.msg.length?pick(a.msg):'';
+ if(a.id=='kelas'){let d=course||(near(160)&&near(160).role.startsWith('Dosen ')?near(160).role.slice(6):pick(DOS));S.kelas++;m=`Kamu ikut kelas ${d}. Catatanmu bertambah.`}
+ S.en+=a.e;S.mood+=a.m;S.ilmu+=a.i;log(m);stats();renderAct()}
+/* dialog */
+let cur=null;
+function bub(c,t){const p=document.createElement('p');p.className=c;p.textContent=t;$('#dl').append(p);$('#dl').scrollTop=1e5}
+function openD(n){cur=n;n.w=99;S.lock=true;const dos=n.role.startsWith('Dosen ');const d=dos?{i:`Selamat datang di ruang ${n.role}. Silakan bertanya soal materi atau tugas.`,q:[]}:T[n.role];
+ const c=dos?n.role.slice(6):'';const qs=dos?[['Materi minggu ini apa?',[DD[c][0]]],['Ada tugas apa?',[DD[c][1]]],['Tips lulus mata kuliah ini?',[DD[c][2]]]]:d.q;
+ $('#dn').textContent=n.role==='Ayla'?'Ayla ✦':n.role;$('#dl').innerHTML='';bub('n',d.i.replace('{n}',S.name));$('#dq').innerHTML='';
+ qs.forEach(([q,a])=>{const b=document.createElement('button');b.textContent=q;b.onclick=()=>{bub('u',q);bub('n',pick(a));S.mood+=n.role==='Ayla'?3:1;stats()};$('#dq').append(b)});
+ if(dos){const b=document.createElement('button');b.textContent='Boleh ikut kelas sekarang?';b.onclick=()=>{bub('u',b.textContent);if(zoneAt(n.x,n.y).id!=='gedung')return bub('n','Kita sedang di luar kelas, kuliahnya nanti di gedung.');bub('n','Silakan duduk, kita mulai.');doAct(ACT[3],c)};$('#dq').append(b)}
+ $('#dlg').hidden=false}
+function closeD(){$('#dlg').hidden=true;S.lock=false;if(cur)cur.w=1;cur=null}
+$('#dx').onclick=closeD;$('#dlg').onclick=e=>{if(e.target.id=='dlg')closeD()};
+/* engine */
+const cv=$('#cv'),g=cv.getContext('2d'),P={x:300,y:610,tx:null,ty:null,ch:null,mv:0};
+const cam={x:0,y:0},K={},D={x:0,y:0};let vw=0,vh=0,started=false;
+function size(){const r=cv.parentNode.getBoundingClientRect(),d=window.devicePixelRatio||1;vw=r.width;vh=r.height;cv.width=vw*d;cv.height=vh*d;g.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',()=>started&&size());
+addEventListener('keydown',e=>{K[e.key.toLowerCase()]=1;if(e.key.toLowerCase()=='e'&&!S.lock&&started){const n=near(80);n&&openD(n)}if(e.key=='Escape'&&S.lock)closeD()});
+addEventListener('keyup',e=>K[e.key.toLowerCase()]=0);
+$$('#dp button').forEach(b=>{const[x,y]=b.dataset.d.split(',').map(Number);b.onpointerdown=e=>{e.preventDefault();D.x=x;D.y=y};b.onpointerup=b.onpointerleave=b.onpointercancel=()=>{D.x=0;D.y=0}});
+cv.onpointerdown=e=>{if(S.lock)return;const r=cv.getBoundingClientRect(),x=e.clientX-r.left+cam.x,y=e.clientY-r.top+cam.y;
+ const n=NP.find(n=>Math.hypot(n.x-x,n.y-24-y)<26);if(n){P.ch=n;P.tx=null}else{P.ch=null;P.tx=cl(x,10,W-10);P.ty=cl(y,10,H-10)}};
+const dist=n=>Math.hypot(n.x-P.x,n.y-P.y);
+function near(r){let b=null,bd=r;NP.forEach(n=>{const d=dist(n);if(d<bd){bd=d;b=n}});return b}
+function start(){if(started)return;started=true;buildBG();size();stats();renderAct();log('Kamu tiba di parkiran kampus. Selamat datang, maba!');requestAnimationFrame(loop)}
+function upd(dt){
+ NP.forEach(n=>{const dx=n.tx-n.x,dy=n.ty-n.y,d=Math.hypot(dx,dy);n.mv=0;
+  if(d>3){if(n.w>=50)return;n.x+=dx/d*n.sp*dt;n.y+=dy/d*n.sp*dt;n.mv=1}
+  else{n.w-=dt;if(n.w<=0&&n.r>0&&n.w>-50){const a=R(0,6.28),r=R(0,n.r);n.tx=cl(n.hx+Math.cos(a)*r,15,W-15);n.ty=cl(n.hy+Math.sin(a)*r,40,H-15);n.w=R(1,4)}}});
+ if(!S.lock){let vx=(K.arrowright||K.d?1:0)-(K.arrowleft||K.a?1:0)+D.x,vy=(K.arrowdown||K.s?1:0)-(K.arrowup||K.w?1:0)+D.y,sp=150;P.mv=0;
+  if(vx||vy){P.tx=null;P.ch=null;const l=Math.hypot(vx,vy);P.x+=vx/l*sp*dt;P.y+=vy/l*sp*dt;P.mv=1}
+  else{let tx=P.tx,ty=P.ty;if(P.ch){tx=P.ch.x;ty=P.ch.y}
+   if(tx!=null){const d=Math.hypot(tx-P.x,ty-P.y);if(P.ch&&d<50){const n=P.ch;P.ch=null;openD(n)}else if(d>4){P.x+=(tx-P.x)/d*sp*dt;P.y+=(ty-P.y)/d*sp*dt;P.mv=1}else P.tx=null}}
+  P.x=cl(P.x,10,W-10);P.y=cl(P.y,30,H-8)}
+ const z=zoneAt(P.x,P.y);if(!curZ||z.id!==curZ.id){curZ=z;$('#zn').textContent='📍 '+z.n;renderAct();if(started&&logs.length)log('Kamu sampai di '+z.n+'.')}
+ const n=S.lock?null:near(80);const tb=$('#talk');tb.hidden=!n;if(n){tb.textContent='Ngobrol: '+n.role;tb.onclick=()=>openD(n)}
+ cam.x+=(cl(P.x-vw/2,0,Math.max(0,W-vw))-cam.x)*.12;cam.y+=(cl(P.y-vh/2,0,Math.max(0,H-vh))-cam.y)*.12}
+function person(x,y,col,t,mv,hair){const b=mv?Math.sin(t*12)*1.5:0;g.fillStyle='rgba(0,0,0,.22)';g.beginPath();g.ellipse(x,y+2,10,4,0,0,7);g.fill();
+ g.fillStyle=col;g.beginPath();g.roundRect(x-8,y-22+b,16,20,5);g.fill();g.fillStyle='#f0c7a0';g.beginPath();g.arc(x,y-27+b,7,0,7);g.fill();g.fillStyle=hair||'#2a1c14';g.beginPath();g.arc(x,y-29+b,7,Math.PI,0);g.fill()}
+function lab(x,y,t,hl){g.font='600 11px system-ui,sans-serif';const w=g.measureText(t).width+12;g.fillStyle=hl?'#d6401b':'rgba(29,26,22,.8)';g.beginPath();g.roundRect(x-w/2,y-54,w,16,8);g.fill();g.fillStyle='#fff';g.textAlign='center';g.fillText(t,x,y-42)}
+function draw(t){g.clearRect(0,0,vw,vh);g.drawImage(BG,-cam.x,-cam.y);g.save();g.translate(-cam.x,-cam.y);
+ const all=[...NP,{pl:1,x:P.x,y:P.y,mv:P.mv}].sort((a,b)=>a.y-b.y);
+ all.forEach(n=>{if(n.pl){person(n.x,n.y,'#d6401b',t,n.mv,'#1d1a16');g.strokeStyle='#fff';g.lineWidth=2;g.beginPath();g.ellipse(n.x,n.y+2,14,6,0,0,7);g.stroke();lab(n.x,n.y,S.name+' · Maba',1);return}
+  if(n.role==='Ayla'){g.strokeStyle='rgba(233,115,155,.8)';g.lineWidth=3;g.beginPath();g.ellipse(n.x,n.y+2,16+Math.sin(t*3)*3,7,0,0,7);g.stroke()}
+  person(n.x,n.y,n.col,t,n.mv,n.hair);lab(n.x,n.y,n.role==='Ayla'?'Ayla ✦':n.role,n.role==='Ayla')});
+ g.restore()}
+let last=0;function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;upd(dt);draw(ts/1000);requestAnimationFrame(loop)}
+</script>
+<script>
+/* v2: gedung & mobil solid, ring basket, karakter cowok/cewek, dialog Ayla */
+const OB=[],ob=(x,y,w,h)=>OB.push([x,y,w,h]);
+const hit=(x,y,r=7)=>OB.some(([a,b,w,h])=>x+r>a&&x-r<a+w&&y+2>b&&y-5<b+h);
+function buildBG(){seed=7;OB.length=0;BG=document.createElement('canvas');BG.width=W;BG.height=H;const g=BG.getContext('2d');
+ const rr=(x,y,w,h,r,c)=>{g.fillStyle=c;g.beginPath();g.roundRect(x,y,w,h,r);g.fill()},ci=(x,y,r,c)=>{g.fillStyle=c;g.beginPath();g.arc(x,y,r,0,7);g.fill()},ln=(a,b,c,d)=>{g.beginPath();g.moveTo(a,b);g.lineTo(c,d);g.stroke()};
+ g.fillStyle='#d9cdb2';g.fillRect(0,0,W,H);
+ /* taman */
+ g.fillStyle='#a8cf88';g.fillRect(0,0,640,480);g.fillStyle='#e6d9bd';g.fillRect(0,420,640,34);g.fillRect(560,0,34,480);
+ for(let i=0;i<40;i++){g.fillStyle=pick(['#f2b8c6','#fff3b0','#fff']);g.fillRect(rng()*620,rng()*400,4,4)}
+ ci(110,250,48,'#e6d9bd');ci(110,250,36,'#8fc7e8');ci(110,250,9,'#fff');ob(70,212,80,76);
+ rr(290,300,80,12,2,'#8a5a34');rr(296,312,6,12,1,'#8a5a34');rr(358,312,6,12,1,'#8a5a34');
+ for(let i=0;i<20;i++){const x=rng()*600+20,y=rng()*400+50;if(x>60&&x<500&&y>130&&y<370)continue;
+  g.fillStyle='rgba(0,0,0,.15)';g.beginPath();g.ellipse(x,y+14,24,9,0,0,7);g.fill();rr(x-4,y-6,8,20,2,'#6b4a2b');ci(x,y-14,24,'#4f8f4a');ci(x-7,y-20,12,'#69a85c');ob(x-5,y-4,10,18)}
+ /* gedung: 4 bangunan solid */
+ g.fillStyle='#e9ddc5';g.fillRect(640,0,860,440);g.strokeStyle='rgba(0,0,0,.08)';g.lineWidth=1;
+ for(let x=640;x<1500;x+=60)ln(x,180,x,440);for(let y=180;y<440;y+=60)ln(640,y,1500,y);
+ ['R.101 Algoritma','R.102 Basis Data','R.103 Kalkulus','R.104 Manajemen'].forEach((t,i)=>{const x=660+i*220,w=170;
+  g.fillStyle='rgba(0,0,0,.18)';g.fillRect(x+8,168,w,14);rr(x,40,w,130,4,'#d8c7a3');g.strokeStyle='#7c6a4c';g.lineWidth=6;g.strokeRect(x+3,43,w-6,124);
+  g.fillStyle='#a8452a';g.beginPath();g.moveTo(x-12,48);g.lineTo(x+w+12,48);g.lineTo(x+w-14,0);g.lineTo(x+14,0);g.fill();
+  g.strokeStyle='rgba(0,0,0,.25)';g.lineWidth=2;for(let k=1;k<4;k++)ln(x-12+k*6,48-k*12,x+w+12-k*6,48-k*12);
+  [x+18,x+w-52].forEach(wx=>{rr(wx,92,34,30,3,'#9fd3e8');g.strokeStyle='#7c6a4c';g.lineWidth=3;g.strokeRect(wx,92,34,30);ln(wx+17,92,wx+17,122)});
+  rr(x+w/2-18,112,36,58,3,'#6b5a3f');ci(x+w/2+10,142,2.5,'#e0a800');rr(x+w/2-30,166,60,6,1,'#b8b0a0');
+  rr(x+w/2-56,58,112,18,3,'#1d1a16');g.fillStyle='#fff';g.font='700 11px sans-serif';g.textAlign='center';g.fillText(t,x+w/2,71);ob(x-4,0,w+8,168)});
+ /* parkiran + mobil solid */
+ g.fillStyle='#7b8088';g.fillRect(0,520,600,480);g.strokeStyle='#fff';g.lineWidth=2;
+ const car=(x,y,c)=>{rr(x+9,y+10,38,80,10,c);rr(x+13,y+26,30,14,3,'#9fd3e8');rr(x+14,y+40,28,20,3,'rgba(255,255,255,.25)');rr(x+13,y+62,30,11,3,'#9fd3e8');
+  [[5,18],[46,18],[5,68],[46,68]].forEach(([a,b])=>rr(x+a,y+b,5,14,2,'#111'));rr(x+12,y+10,8,4,1,'#ffe27a');rr(x+36,y+10,8,4,1,'#ffe27a');rr(x+12,y+86,8,4,1,'#e53935');rr(x+36,y+86,8,4,1,'#e53935');ob(x+5,y+10,46,80)};
+ for(const y of[560,880])for(let i=0;i<9;i++){const x=20+i*62;g.strokeRect(x,y,56,100);if(rng()<.65)car(x,y,pick(['#c0392b','#2c6e9b','#e8e2d0','#2b2b2b','#e0a800','#2f7d4f']))}
+ rr(20,520,50,28,3,'#e0d6bf');g.fillStyle='#1d1a16';g.font='700 11px sans-serif';g.textAlign='center';g.fillText('POS',45,539);ob(20,520,50,28);
+ /* lapangan basket + 2 ring */
+ g.fillStyle='#c9bfa6';g.fillRect(880,480,620,520);rr(930,540,480,400,6,'#d98a4e');g.strokeStyle='#fff';g.lineWidth=3;g.strokeRect(930,540,480,400);
+ ln(1170,540,1170,940);g.beginPath();g.arc(1170,740,48,0,7);g.stroke();g.strokeRect(930,650,95,180);g.strokeRect(1315,650,95,180);
+ g.beginPath();g.arc(1025,740,40,-1.57,1.57);g.stroke();g.beginPath();g.arc(1315,740,40,1.57,4.71);g.stroke();
+ const hoop=(bx,d)=>{g.fillStyle='#444';g.fillRect(bx-d*24-6,735,12,12);g.strokeStyle='#444';g.lineWidth=4;ln(bx-d*18,741,bx,741);
+  rr(bx-3,722,6,38,2,'#fff');g.strokeStyle='#c0392b';g.lineWidth=1.5;g.strokeRect(bx-3,722,6,38);g.strokeStyle='#e8501a';g.lineWidth=3;g.beginPath();g.arc(bx+d*13,741,9,0,7);g.stroke();
+  g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=1;g.beginPath();g.arc(bx+d*13,741,5,0,7);g.stroke();ob(bx-d*24-7,734,14,14)};
+ hoop(930,1);hoop(1410,-1);
+ g.font='800 26px "Bricolage Grotesque",sans-serif';g.textAlign='left';g.fillStyle='rgba(30,20,10,.5)';
+ ZN.forEach(z=>g.fillText(z.n,z.x+16,z.y+(z.id=='parkir'||z.id=='basket'?z.h-18:z.id=='gedung'?215:36)));g.fillText('Plaza',690,700)}
+/* karakter 2D cowok vs cewek */
+function person(x,y,o,t,mv){const s=mv?Math.sin(t*12):0,b=mv?Math.abs(s)*1.2:0,sk=o.skin||'#f0c7a0';
+ g.fillStyle='rgba(0,0,0,.22)';g.beginPath();g.ellipse(x,y+2,11,4,0,0,7);g.fill();
+ g.fillStyle=o.f?sk:(o.pant||'#2d3748');g.fillRect(x-5,y-9,4,9+s*2);g.fillRect(x+1,y-9,4,9-s*2);
+ g.fillStyle=o.col;
+ if(o.f){g.fillRect(x-9,y-20-b,3,9);g.fillRect(x+6,y-20-b,3,9);g.beginPath();g.roundRect(x-6,y-21-b,12,12,3);g.fill();g.beginPath();g.moveTo(x-6,y-11-b);g.lineTo(x+6,y-11-b);g.lineTo(x+10,y-4);g.lineTo(x-10,y-4);g.fill()}
+ else{g.fillRect(x-12,y-21-b,3,10);g.fillRect(x+9,y-21-b,3,10);g.beginPath();g.roundRect(x-9,y-22-b,18,15,3);g.fill()}
+ g.fillStyle=sk;g.beginPath();g.arc(x,y-28-b,6.5,0,7);g.fill();g.fillRect(x-12,y-11-b,3,3);g.fillRect(x+9,y-11-b,3,3);
+ g.fillStyle=o.hair||'#2a1c14';g.beginPath();g.arc(x,y-29-b,o.f?7.5:6.8,Math.PI,0);g.fill();
+ if(o.f){g.fillRect(x-8,y-30-b,3,17);g.fillRect(x+5,y-30-b,3,17)}
+ if(o.cap){g.fillStyle='#1b2a44';g.fillRect(x-8,y-34-b,16,4);g.fillRect(x-9,y-31-b,18,2)}}
+/* NPC ulang: gender, posisi bebas tabrakan */
+NP.length=0;
+function mk2(role,x,y,r,f,o={}){mk(role,x,y,r,Object.assign({f,col:pick(COL),hair:f?pick(['#2a1c14','#5a3220','#1a0f12']):pick(['#2a1c14','#3b2a1a','#111']),pant:pick(['#2d3748','#3a4a5a','#5a4a3a'])},o))}
+const rf=()=>Math.random()<.5;
+mk2('Satpam',100,740,18,0,{col:'#2b4a7a',pant:'#1b2a44',cap:1,sp:25});mk2('Mahasiswa',260,780,90,rf());mk2('Mahasiswa',420,720,60,rf());mk2('Mahasiswa',150,830,40,rf());
+[[1050,700],[1200,640],[1300,820],[1150,860]].forEach(([x,y])=>mk2('Anak Basket',x,y,90,0,{col:'#d6401b',pant:'#222',sp:70}));mk2('Mahasiswa',910,560,30,rf());
+mk2('Ayla',330,268,0,1,{col:'#e9739b',hair:'#1a0f12'});
+for(let i=0;i<7;i++){const a=i/7*Math.PI*2;mk2('NPC Cowok',330+Math.cos(a)*92,278+Math.sin(a)*70,14,0,{sp:18})}
+mk2('Mahasiswa',200,90,60,rf());mk2('Mahasiswa',540,400,60,rf());
+DOS.forEach((c,i)=>mk2('Dosen '+c,745+i*220,300,60,i%2,{col:'#5a3e6b',pant:'#222',sp:22,hair:i%2?'#3a2418':'#aaa'}));
+mk2('Mahasiswa',900,300,150,rf());mk2('Mahasiswa',1300,260,120,rf());mk2('Mahasiswa',740,700,150,rf());
+Object.assign(P,{pl:1,col:'#d6401b',hair:'#1d1a16',pant:'#2d3748',x:300,y:760});
+/* dialog Ayla */
+T.Ayla.q=[['Kamu hari sabtu suka ngapain?',['Hari Sabtu aku latihan Muaythai.']],
+['Kok banyak cowo di sekitar mu?',['Yalah, gw cewe paling cantik dan berprestasi di kampus ini.']],
+['Kamu lagi ngapain di taman?',['Santai sambil baca catatan kuliah. Di sini adem.','Lagi istirahat, kuliah pagi tadi padat banget.']],
+['Ada rekomendasi kegiatan buat maba?',['Ikut kelas, main basket kalau suka, dan sering jalan di taman. Jangan lupa istirahat.']],
+['Dosen mana yang paling asyik?',['Dosen Basis Data suka kasih contoh nyata, jadi gampang dipahami.','Dosen Kalkulus tegas tapi sabar. Latihan soal yang banyak ya.']]];
+/* tabrakan: gedung, mobil, tiang ring, pohon, air mancur */
+const _u=upd;
+upd=function(dt){P.f=!!S.f;const E=[...NP,P],o=E.map(e=>[e.x,e.y]);_u(dt);
+ E.forEach((e,i)=>{const[ox,oy]=o[i],nx=e.x,ny=e.y;if(!hit(nx,ny))return;e.x=nx;e.y=oy;
+  if(hit(e.x,e.y)){e.x=ox;e.y=ny;if(hit(e.x,e.y)){e.x=ox;e.y=oy}}
+  if(e.x===ox&&e.y===oy){if(e===P)P.tx=null;else{e.tx=e.x;e.ty=e.y;e.w=R(.3,1.2)}}})};
+draw=function(t){g.clearRect(0,0,vw,vh);g.drawImage(BG,-cam.x,-cam.y);g.save();g.translate(-cam.x,-cam.y);
+ [...NP,P].sort((a,b)=>a.y-b.y).forEach(n=>{const A=n.role==='Ayla';
+  if(A||n.pl){g.strokeStyle=A?'rgba(233,115,155,.85)':'#fff';g.lineWidth=A?3:2;g.beginPath();g.ellipse(n.x,n.y+2,A?16+Math.sin(t*3)*3:14,6,0,0,7);g.stroke()}
+  person(n.x,n.y,n,t,n.mv);lab(n.x,n.y,n.pl?S.name+' · Maba':A?'Ayla ✦':n.role,A||n.pl)});g.restore()};
+const _g0=$('#go0').onclick;$('#go0').onclick=()=>{S.f=$('input[name=g]:checked').value=='w';_g0()};
+</script>
+<script>
+/* v3: plaza + gedung kotak petak terbuka, pos satpam, motor solid */
+ZN.push({id:'plaza',n:'Plaza & Gedung Terbuka',x:600,y:440,w:280,h:560});
+let room=null;const RM=[['A','Kantin Terbuka',625,500,230,170],['B','Ruang Belajar Terbuka',625,740,230,170]];
+const _b=buildBG;
+buildBG=function(){_b();const g=BG.getContext('2d');
+ const rr=(x,y,w,h,r,c)=>{g.fillStyle=c;g.beginPath();g.roundRect(x,y,w,h,r);g.fill()},ci=(x,y,r,c)=>{g.fillStyle=c;g.beginPath();g.arc(x,y,r,0,7);g.fill()};
+ const cols=['#e0a800','#c0392b','#2f7d4f','#2c6e9b','#fff'];
+ /* hapus pos lama, ganti pos satpam yang jelas */
+ OB.splice(OB.findIndex(a=>a[0]==20&&a[1]==520&&a[2]==50),1);g.fillStyle='#7b8088';g.fillRect(15,515,60,38);
+ rr(10,700,100,60,4,'#f2ede0');rr(4,694,112,14,3,'#b23a2a');for(let i=0;i<7;i++)rr(8+i*16,694,8,14,0,'#f2ede0');
+ rr(22,716,36,22,3,'#9fd3e8');rr(72,716,24,44,2,'#6b5a3f');rr(14,681,92,14,3,'#1d1a16');
+ g.fillStyle='#fff';g.font='700 11px sans-serif';g.textAlign='center';g.fillText('POS SATPAM',60,692);ob(10,700,100,60);
+ /* motor solid */
+ const mt=(x,y,c)=>{rr(x+5,y,6,10,2,'#111');rr(x+5,y+30,6,10,2,'#111');rr(x+3,y+12,10,16,4,c);rr(x+4,y+20,8,8,2,'#222');rr(x-2,y+9,20,3,1,'#222');rr(x+6,y+2,4,3,1,'#ffe27a');ob(x-2,y,20,40)};
+ for(let i=0;i<12;i++)if(rng()<.7)mt(140+i*37,668,pick(['#c0392b','#2c6e9b','#e8e2d0','#2b2b2b','#e0a800']));
+ /* plaza */
+ g.fillStyle='#e0d3b6';g.fillRect(600,480,280,520);g.strokeStyle='rgba(0,0,0,.07)';g.lineWidth=1;for(let y=480;y<1000;y+=40){g.beginPath();g.moveTo(600,y);g.lineTo(880,y);g.stroke()}
+ g.font='800 17px Bricolage Grotesque,sans-serif';g.textAlign='left';g.fillStyle='rgba(30,20,10,.5)';g.fillText('Plaza & Gedung Terbuka',604,474);
+ /* gedung kotak petak terbuka: dinding solid, pintu tanpa daun, isi terlihat */
+ const box=(x,y,w,h,fl,name)=>{rr(x,y,w,h,2,fl);
+  [[x,y,w,10],[x,y,10,h],[x+w-10,y,10,h],[x,y+h-10,w/2-25,10],[x+w/2+25,y+h-10,w/2-25,10]].forEach(([a,b,c,d])=>{rr(a,b,c,d,2,'#7a6a52');ob(a,b,c,d)});
+  g.fillStyle='rgba(0,0,0,.1)';g.fillRect(x+10,y+10,w-20,8);rr(x+w/2-62,y-16,124,16,3,'#1d1a16');g.fillStyle='#fff';g.font='700 11px sans-serif';g.textAlign='center';g.fillText(name,x+w/2,y-4);
+  rr(x+w/2-29,y+h-12,5,14,1,'#c0392b');rr(x+w/2+24,y+h-12,5,14,1,'#c0392b')};
+ box(625,500,230,170,'#c9a574','Kantin Terbuka');
+ rr(645,516,190,18,3,'#8a5a34');for(let i=0;i<6;i++)rr(652+i*30,520,10,8,2,pick(cols));ob(645,516,190,18);
+ [[680,585],[800,585]].forEach(([cx,cy])=>{ci(cx,cy,17,'#efe2c2');rr(cx-4,cy-4,8,8,2,'#c0392b');rr(cx-26,cy-5,8,10,2,'#6b4a2b');rr(cx+18,cy-5,8,10,2,'#6b4a2b');ob(cx-17,cy-17,34,34)});
+ box(625,740,230,170,'#b9c7d0','Ruang Belajar Terbuka');
+ rr(641,756,198,14,2,'#6b4a2b');for(let i=0;i<12;i++)rr(645+i*16,758,10,10,1,pick(cols));ob(641,756,198,14);
+ [[655,810],[755,810]].forEach(([tx,ty])=>{rr(tx,ty,70,24,3,'#e8d9b8');rr(tx+8,ty+5,16,12,2,'#333');rr(tx+40,ty+6,12,12,1,'#2c6e9b');ob(tx,ty,70,24)})};
+ /* NPC: satpam baju putih celana hitam, penghuni gedung terbuka */
+const sp=NP.find(n=>n.role==='Satpam');Object.assign(sp,{x:60,y:785,hx:60,hy:785,tx:60,ty:785,r:12,col:'#ffffff',pant:'#111111'});
+mk2('Mahasiswa',680,612,6,rf(),{sp:12});mk2('Mahasiswa',800,612,6,rf(),{sp:12});mk2('Mahasiswa',740,556,8,rf(),{sp:12});
+mk2('Mahasiswa',690,860,6,rf(),{sp:12});mk2('Mahasiswa',790,860,6,rf(),{sp:12});mk2('NPC Cowok',740,795,8,0,{sp:12});
+T.Mahasiswa.q.push(['Ada tempat nongkrong di plaza?',['Ada kantin terbuka dan ruang belajar di plaza. Pintunya terbuka, langsung masuk saja.']]);
+T['Satpam'].q.push(['Pos satpam di mana?',['Ini pos kami, di sisi kiri jalur parkiran. Kalau ada kehilangan, lapor ke sini.']]);
+T['NPC Cowok'].q.push(['Ruang belajar plaza enak buat apa?',['Buat ngerjain tugas. Tenang, ada rak buku, dan pintunya terbuka.']]);
+ACT.push({id:'kantin',t:'Nongkrong di kantin',z:'plaza',r:'A',e:14,m:9,i:0,msg:['Kamu pesan es teh dan ngobrol santai.','Makan siang di kantin, energi pulih.']},
+ {id:'belajar',t:'Belajar di ruang terbuka',z:'plaza',r:'B',e:-8,m:2,i:12,msg:['Kamu mengerjakan tugas bareng mahasiswa lain.','Membaca buku sambil mencatat, ilmu bertambah.']});
+renderAct=function(){const zid=curZ?curZ.id:'';$('#acts').innerHTML='';ACT.forEach(a=>{const b=document.createElement('button'),z=ZN.find(z=>z.id==a.z),ok=a.z===zid&&(!a.r||a.r===room);b.disabled=!ok;
+ b.innerHTML=`${a.t}<small>${ok?'Bisa dilakukan di sini':a.r?'Masuk ke '+RM.find(r=>r[0]==a.r)[1]:'Pergi ke '+z.n}</small>`;b.onclick=()=>doAct(a);$('#acts').append(b)})};
+const _u3=upd;
+upd=function(dt){_u3(dt);const r=RM.find(([,,x,y,w,h])=>P.x>x&&P.x<x+w&&P.y>y&&P.y<y+h),id=r?r[0]:null;
+ if(id!==room){room=id;$('#zn').textContent='📍 '+curZ.n+(r?' · '+r[1]:'');renderAct();if(r)log('Kamu masuk '+r[1]+'. Isinya terlihat dari luar.')}};
+</script>
+<script>
+/* v4: NPC spesial Ndy di parkiran dekat motornya */
+const _b2=buildBG;
+buildBG=function(){_b2();const g=BG.getContext('2d'),rr=(x,y,w,h,r,c)=>{g.fillStyle=c;g.beginPath();g.roundRect(x,y,w,h,r);g.fill()};
+ const x=470,y=735;rr(x+5,y,6,10,2,'#111');rr(x+5,y+30,6,10,2,'#111');rr(x+3,y+12,10,16,4,'#2a9d8f');rr(x+4,y+20,8,8,2,'#222');rr(x-2,y+9,20,3,1,'#222');rr(x+6,y+2,4,3,1,'#ffe27a');
+ g.fillStyle='rgba(30,20,10,.55)';g.font='700 10px sans-serif';g.textAlign='center';g.fillText('motor Ndy',x+8,y+54);ob(x-2,y,20,40)};
+mk2('Ndy',440,765,6,1,{col:'#2a9d8f',hair:'#1a0f12',sp:10});
+T.Ndy={i:'Hmm, maba ya? Jangan lama-lama, aku lagi ngecek motor sebelum berangkat kerja.',q:[
+['Kenal Ayla ga?',['Owh cewe itu, dasar cewe sombong! Gw dong udah kuliah sambil kerja.']],
+['Kamu udah kerja sambil kuliah?',['Iyalah, cewe karir gitu loh!']],
+['Motor kamu keren, ya?',['Ini hasil gaji gw sendiri. Beda sama Ayla yang tinggal duduk di taman, cowok-cowok datang sendiri.']],
+['Gimana rasanya kuliah sambil kerja?',['Capek, tapi gw mandiri. Ayla mah enak, dikerubungi cowok terus tiap hari.']],
+['Kamu sering ke taman kampus?',['Ngapain? Biar kayak Ayla dikerubungi cowok? Gw sibuk cari uang.']],
+['Cowok-cowok di taman itu kenapa?',['Ya semuanya nengok ke Ayla. Padahal gw juga kerja keras, tau.']],
+['Ada tips buat maba?',['Cari duit sendiri dari awal. Jangan cuma ngandelin popularitas kayak Ayla.']]]};
+</script></body></html>
